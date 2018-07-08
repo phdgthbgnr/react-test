@@ -18,11 +18,17 @@ class App extends Component {
           To get started, edit <code>src/App.js{this.element}<br/>{this.element2}</code> and save to reload.
         </p>
         <Hello content="content"/>
+
         <Test content="test"/>
+
         <SayHello firstName="kjkjkjkj" lastName="lklklk" titi="lkkl"/>
         <Ticks/>
+
         <Events style={{display:'bloc',height:30,width:30}}/>
+
         <div id="umount"><Mystates prop={{lapse:0,running:false,stuff:'stuff',other:'other',isHidden:false}}/></div>
+
+        <Formulaire/>
       </div>
     );
   }
@@ -256,6 +262,29 @@ class Mystates extends App{
     </div>)
   }
 
+}
+
+
+
+
+class Formulaire extends App{
+  // constructor(props){
+  //   super(props)
+  // }
+
+  handlerSubmit = (evt) => {
+    evt.preventDefault()
+    console.log(this.inputNode.value)
+  }
+
+  render(){
+    return (
+      <form onSubmit={this.handlerSubmit}>
+        <label>Name : <input type="text" name="userName" ref={node => this.inputNode = node}/></label>
+        <input type="submit" value="envoyer"/>
+      </form>
+    )
+  }
 }
 
 // class Greeting extends React.Component {
