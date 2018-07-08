@@ -21,6 +21,8 @@ class App extends Component {
         <SayHello firstName="kjkjkjkj" lastName="lklklk" titi="lkkl"/>
         <Ticks/>
         <Events style={{display:'bloc',height:30,width:30}}/>
+
+        <States/>
       </div>
     );
   }
@@ -141,6 +143,10 @@ class Events extends App{
     </div>
     )
   }
+}
+
+class States extends App{
+  
 }
 
 // class Greeting extends React.Component {
