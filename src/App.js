@@ -22,6 +22,7 @@ class App extends Component {
         <Test content="test"/>
 
         <SayHello firstName="kjkjkjkj" lastName="lklklk" titi="lkkl"/>
+
         <Ticks/>
 
         <Events style={{display:'bloc',height:30,width:30}}/>
@@ -29,10 +30,16 @@ class App extends Component {
         <div id="umount"><Mystates prop={{lapse:0,running:false,stuff:'stuff',other:'other',isHidden:false}}/></div>
 
         <Formulaire/>
+
+        <Formulaireerror id={{id:'myform'}} defaut="kkkjkjkjre" style={{style:{margin:'5% 5%'}}}/>
+
       </div>
     );
   }
 }
+
+
+
 
 class Hello extends App{
   constructor (props){
@@ -53,6 +60,8 @@ class Test extends App{
     return (<div id={this.text}>{this.props.content}</div>)
   }
 }
+
+
 
 
 class SayHello extends App{
@@ -111,6 +120,9 @@ class Ticks extends App{
     return <div><input type="text" value={this.state.time}/></div>
   }
 }
+
+
+
 
 
 class Events extends App{
@@ -243,7 +255,7 @@ class Mystates extends App{
   }
 
   render(){
-    const buttonStyles ={
+    const buttonStyles = {
       border:'1px solid #ccc',
       backgroundColor:'#666',
       fontSize:'2em',
@@ -267,6 +279,8 @@ class Mystates extends App{
 
 
 
+
+
 class Formulaire extends App{
   // constructor(props){
   //   super(props)
@@ -285,6 +299,62 @@ class Formulaire extends App{
       </form>
     )
   }
+}
+
+
+
+
+
+
+class Formulaireerror extends App{
+  constructor(props){
+    super(props)
+    this.state = this.getErrorMessage('') //{error:true, errorMessage:''}
+    console.log(props)
+  }
+
+  getErrorMessage = (v) => {
+    if(v.length === 0) return {error:true, errorMessage:'required'}
+    if(v.length < 3) return {error:true, errorMessage:'3 characters min.'}
+    if(!v.includes('s')) return {error:true, errorMessage:'Must have a "s"'}
+    return {error:null, errorMessage:''}
+  }
+
+  handlerSubmit = (evt) => {
+    evt.preventDefault()
+    const {value} = this.nameNode
+    const state = this.getErrorMessage(value)
+    this.setState(state,() => {
+      console.log(this.state)
+    })
+    console.log(value)
+  }
+
+  handlerChange = (evt) => {
+    const {value} = evt.target
+    const state = this.getErrorMessage(value)
+    this.setState(state,() => {
+      console.log(this.state)
+    })
+  }
+
+  render(){
+    // const {a,b} = this.state
+    // console.log('a',a)
+    // console.log('b',b)
+    const error = this.state.error
+    const msgerr = this.state.errorMessage
+    return (
+      <div {...this.props.id} {...this.props.style}>
+        <form onSubmit={this.handlerSubmit}>
+          <label>Name : <input type="text" name="userName" ref={node => this.nameNode = node} onChange={this.handlerChange}/></label>
+          <button disabled={Boolean(error)}type="submit">Envoyer</button>
+          {error ? <p style={{color: 'red'}}>{msgerr}</p> : null}
+        </form>
+      </div>
+    )
+  }
+
 }
 
 // class Greeting extends React.Component {
