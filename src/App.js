@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import ReactDOM from 'react-dom';
 import logo from './logo.svg';
 import './App.css';
 import PropTypes from 'prop-types';
@@ -21,7 +22,7 @@ class App extends Component {
         <SayHello firstName="kjkjkjkj" lastName="lklklk" titi="lkkl"/>
         <Ticks/>
         <Events style={{display:'bloc',height:30,width:30}}/>
-        <Mystates prop={{lapse:0,running:false,stuff:'stuff',other:'other'}}/>
+        <div id="umount"><Mystates prop={{lapse:0,running:false,stuff:'stuff',other:'other',isHidden:false}}/></div>
       </div>
     );
   }
@@ -144,12 +145,18 @@ class Events extends App{
   }
 }
 
+
+
+
+
+
 class Mystates extends App{
   constructor(props){
     super(props)
     console.log('props', props)
     this.state=props.prop
     console.log('state', this.state)
+    this.refs = React.createRef();
   }
 
   myinterval = () => {
@@ -174,12 +181,22 @@ class Mystates extends App{
         })
         
         break;
+        case 'clear':
+        state = {lapse:0,running:false}
+        this.setState(state, () =>{
+          clearInterval(this.timer)
+        })
+        break;
         default:
         break;
       }
     
       console.log(this.state) // this.state pas encore à jour
 
+  }
+
+  componentDidMount(){
+    console.log('rootNode',this.rootNode)
   }
 
   componentDidUpdate(){
@@ -192,7 +209,31 @@ class Mystates extends App{
     //     clearInterval(this.timer) 
     //   }
     // })
-    console.log('componentDidUpdate', this.state)
+    // console.log('componentDidUpdate', this.state)
+    console.log('componentDidUpdate')
+  }
+  
+  componentWillUnmount(){
+    console.log('componentWillUnmount')
+    clearInterval(this.timer)
+  }
+
+  hidding = (evt) => {
+    console.log(evt.target.checked)
+    const state = evt.target.checked ? {isHidden:false} : {isHidden:true}
+    // let mountNode = ReactDOM.findDOMNode('umount');
+    console.log('refs', this.Refs)
+    this.setState(state, () =>{
+      if(state.isHidden){
+        // document.getElementById('umount').children
+        this.rootNode.remove()
+      }else{
+        this.rootNode.remove()
+        // this.rootNode.style.display='none'
+        // ReactDOM.unmountComponentAtNode(mountNode);
+      }
+        return{isHidden:!state.isHidden}
+      })
   }
 
   render(){
@@ -208,9 +249,10 @@ class Mystates extends App{
     console.log('lapse',lapse)
     console.log('running',running)
     return (
-    <div>state : {lapse}<br/>
+    <div ref={node => (this.rootNode = node)}>state : {lapse} ms<br/>
       <button onClick={this.handlerClick} id="watch" style={buttonStyles}>{running ? 'Stop': 'watch'}</button>
       <button onClick={this.handlerClick} id="clear" style={buttonStyles}>Clear</button>
+      <label htmlFor="hide">hide<input type="checkbox" name="hide" id="hide" onChange={this.hidding}/></label>
     </div>)
   }
 
