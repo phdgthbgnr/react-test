@@ -21,8 +21,7 @@ class App extends Component {
         <SayHello firstName="kjkjkjkj" lastName="lklklk" titi="lkkl"/>
         <Ticks/>
         <Events style={{display:'bloc',height:30,width:30}}/>
-
-        <States/>
+        <Mystates prop={{lapse:0,running:false,stuff:'stuff',other:'other'}}/>
       </div>
     );
   }
@@ -145,8 +144,76 @@ class Events extends App{
   }
 }
 
-class States extends App{
-  
+class Mystates extends App{
+  constructor(props){
+    super(props)
+    console.log('props', props)
+    this.state=props.prop
+    console.log('state', this.state)
+  }
+
+  myinterval = () => {
+    // const startt = Date.now() - this.state.lapse
+    this.setState({lapse:Date.now()-this.st})
+  }
+
+  handlerClick = (evt) => {
+    console.log(evt.target.id)
+    switch(evt.target.id){
+      case 'watch':
+        let state = this.state.running === true ? {lapse:0,running:false} : {lapse:10,running:true}
+        // this.setState(state)
+        this.setState(state, () =>{
+          if(state.running){
+            this.st  = Date.now()-state.lapse
+            this.timer = setInterval(this.myinterval,100)
+          }else{
+            clearInterval(this.timer)
+          }
+          return  {running: !state.running}
+        })
+        
+        break;
+        default:
+        break;
+      }
+    
+      console.log(this.state) // this.state pas encore à jour
+
+  }
+
+  componentDidUpdate(){
+    // this.setState(state => {
+    //   console.log(state.running)
+    //   if(state.running){
+    //     const st = Date.now()-state.lapse
+    //     this.timer = setInterval(this.myinterval(st))
+    //   }else{
+    //     clearInterval(this.timer) 
+    //   }
+    // })
+    console.log('componentDidUpdate', this.state)
+  }
+
+  render(){
+    const buttonStyles ={
+      border:'1px solid #ccc',
+      backgroundColor:'#666',
+      fontSize:'2em',
+      padding:10,
+      margin:5,
+      color:'#fff'
+    }
+    const {lapse,running} = this.state 
+    console.log('lapse',lapse)
+    console.log('running',running)
+    return (
+    <div>state : {lapse}<br/>
+      <button onClick={this.handlerClick} id="watch" style={buttonStyles}>{running ? 'Stop': 'watch'}</button>
+      <button onClick={this.handlerClick} id="clear" style={buttonStyles}>Clear</button>
+    </div>)
+  }
+
 }
 
 // class Greeting extends React.Component {
