@@ -311,8 +311,8 @@ class Formulaire extends App{
 class Formulaireerror extends App{
   constructor(props){
     super(props)
-    this.state = this.getErrorMessage('') //{error:true, errorMessage:''}
     console.log(props)
+    this.state = this.getErrorMessage('') //{error:true, errorMessage:''}
   }
 
   getErrorMessage = (v) => {
@@ -360,32 +360,50 @@ class Formulaireerror extends App{
 };
 
 class ControlForm extends App{
-  constructor(){
-    super()
-    this.state= {comma:'', multiline:''}
-  }
+  // constructor(){
+  //   super()
+  // }
+  
+  state = {comma:'', multiline:'', multisel:[]}
+
+  options = ['pomme','poire','banane','abricot','cerise','pêche']
+
 
   handlerComma = (evt) => {
     const {value} = evt.target
+    const vals = value.split(',').map(v => v.trim()).filter(Boolean)
     // console.log(value)
     this.setState({
       comma: value,
-      multiline: value.split(',').map(v => v.trim()).filter(Boolean).join('\n')
-    },e =>{
-    console.log(e)
+      multiline: vals.join('\n'),
+      multisel : vals.filter(v => this.options.includes(v))
+    },() =>{
+    console.log(this.state)
     })
   }
   
-  handlerMulti = (evt) => {
+  handlerMultiline = (evt) => {
     const {value} = evt.target
+    const vals = value.split('\n').map(v => v.trim()).filter(Boolean)
     this.setState({
-      comma: value.split('\n').map(v => v.trim()).filter(Boolean).join(','),
-      multiline: value
+      comma: vals.join(','),
+      multiline: value,
+      multisel : vals.filter(v => this.options.includes(v))
+    })
+  }
+
+  handlerMultisel = (evt) => {
+    console.log(evt.target.selectedOptions)
+    const vals = Array.from(evt.target.selectedOptions).map(o => o.value)
+    this.setState({
+      comma:vals.join(','),
+      multiline: vals.join('\n'),
+      multisel: vals
     })
   }
 
   render(){
-    const {comma,multiline} = this.state
+    const {comma,multiline,multisel} = this.state
     console.log(multiline)
     return (
       <form>
@@ -393,7 +411,16 @@ class ControlForm extends App{
           <label>comma separated :</label>
             <input type="text" onChange={this.handlerComma} value={comma}/>
         </div>
-        <textarea onChange={this.handlerMulti} value={multiline}/>
+        <br/>
+        <textarea value={multiline} onChange={this.handlerMultiline}/>
+        <br/>
+        <select
+          multiple
+          value={multisel} // if single multisel=""
+          size={this.options.length}
+          onChange={this.handlerMultisel}>
+          {this.options.map(value => (<option key={value} value={value}>{value}</option>))}
+        </select>
       </form>
     )
   }
