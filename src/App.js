@@ -33,6 +33,8 @@ class App extends Component {
 
         <Formulaireerror id={{id:'myform'}} defaut="kkkjkjkjre" style={{style:{margin:'5% 5%'}}}/>
 
+        <ControlForm/>
+
       </div>
     );
   }
@@ -355,6 +357,46 @@ class Formulaireerror extends App{
     )
   }
 
+};
+
+class ControlForm extends App{
+  constructor(){
+    super()
+    this.state= {comma:'', multiline:''}
+  }
+
+  handlerComma = (evt) => {
+    const {value} = evt.target
+    // console.log(value)
+    this.setState({
+      comma: value,
+      multiline: value.split(',').map(v => v.trim()).filter(Boolean).join('\n')
+    },e =>{
+    console.log(e)
+    })
+  }
+  
+  handlerMulti = (evt) => {
+    const {value} = evt.target
+    this.setState({
+      comma: value.split('\n').map(v => v.trim()).filter(Boolean).join(','),
+      multiline: value
+    })
+  }
+
+  render(){
+    const {comma,multiline} = this.state
+    console.log(multiline)
+    return (
+      <form>
+        <div>
+          <label>comma separated :</label>
+            <input type="text" onChange={this.handlerComma} value={comma}/>
+        </div>
+        <textarea onChange={this.handlerMulti} value={multiline}/>
+      </form>
+    )
+  }
 }
 
 // class Greeting extends React.Component {
