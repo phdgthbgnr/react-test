@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 import logo from './logo.svg';
 import './App.css';
+import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
+
+const CustomDropZone = Dropzone
 
 class App extends Component {
   element = React.createElement('span',{id:'toto',className:'toto',children:['hello','word']})
@@ -35,6 +38,8 @@ class App extends Component {
 
         <ControlForm/>
 
+        <DropZ />
+        
       </div>
     );
   }
@@ -424,6 +429,23 @@ class ControlForm extends App{
       </form>
     )
   }
+}
+
+class DropZ extends App{
+  render(){
+    let dropzoneRef;
+    return(
+      <CustomDropZone
+         disableClick
+         ref={(node) => { dropzoneRef = node; }} onDrop={(accepted, rejected) => { alert(accepted) }}>
+          <button onClick={() => {
+            console.log(dropzoneRef)
+            dropzoneRef.open()}
+            }></button>
+         </CustomDropZone>
+    )
+  }
+
 }
 
 // class Greeting extends React.Component {
