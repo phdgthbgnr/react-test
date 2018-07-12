@@ -39,6 +39,8 @@ class App extends Component {
         <ControlForm/>
 
         <DropZ />
+
+        <KeysProps/>
         
       </div>
     );
@@ -438,7 +440,7 @@ class DropZ extends App{
       <CustomDropZone
          disableClick
          ref={(node) => { dropzoneRef = node; }} onDrop={(accepted, rejected) => { alert(accepted) }}>
-          <button onClick={() => {
+          <button style={{display:'bloc',height:30,width:100}} onClick={() => {
             console.log(dropzoneRef)
             dropzoneRef.open()}
             }></button>
@@ -447,6 +449,54 @@ class DropZ extends App{
   }
 
 }
+
+
+
+
+class KeysProps extends App{
+
+  static items = [
+    {id:'a', value:'pomme'},
+    {id:'b', value:'orange'},
+    {id:'c', value:'poire'},
+    {id:'d', value:'abricot'},
+    {id:'e', value:'raisin'},
+    {id:'f', value:'cerise'},
+    {id:'g', value:'noix'},
+  ]
+
+  state =  {items:[]}
+
+  addItem = () =>{
+    this.setState(({items}) => ({
+      items:[
+        ...items,KeysProps.items.find(i => !items.includes(i))
+      ]
+    }))
+  }
+
+  removeItem = item => {
+    this.setState(({items}) => ({
+      items:items.filter(i => i !== item)
+    }))
+  }
+
+  render(){
+    const {items} = this.state
+    return(
+      <div>
+        <button  disabled={items.length >= KeysProps.items.length} onClick = {this.addItem}>+</button>
+        {items.map((i) => (
+        <div key={i.id}>
+          <button onClick={()=>this.removeItem(i)}>-</button>
+          {i.value}:<input/>
+        </div>
+      ))}
+      </div>
+    )
+  }
+}
+
 
 // class Greeting extends React.Component {
 //   render() {
